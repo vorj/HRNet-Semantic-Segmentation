@@ -178,7 +178,7 @@ class HighResolutionModule(nn.Module):
 
     def _make_fuse_layers(self):
         if self.num_branches == 1:
-            return None
+            return torch.nn.Identity()
 
         num_branches = self.num_branches
         num_inchannels = self.num_inchannels
@@ -196,7 +196,7 @@ class HighResolutionModule(nn.Module):
                                   bias=False),
                         BatchNorm2d(num_inchannels[i], momentum=BN_MOMENTUM)))
                 elif j == i:
-                    fuse_layer.append(None)
+                    fuse_layer.append(torch.nn.Identity())
                 else:
                     conv3x3s = []
                     for k in range(i-j):
@@ -351,7 +351,7 @@ class HighResolutionNet(nn.Module):
                             num_channels_cur_layer[i], momentum=BN_MOMENTUM),
                         nn.ReLU(inplace=relu_inplace)))
                 else:
-                    transition_layers.append(None)
+                    transition_layers.append(torch.nn.Identity())
             else:
                 conv3x3s = []
                 for j in range(i+1-num_branches_pre):
